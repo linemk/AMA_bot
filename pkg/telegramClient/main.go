@@ -34,7 +34,7 @@ func main() {
 
 	var offset int // смещение
 	for {
-		// gолучаем обновления (сообщения) от пользователя
+		// получаем обновления (сообщения) от пользователя
 		updates, err := client.Updates(offset, 10)
 		if err != nil {
 			log.Printf("error while getting updates: %v\n", err)
@@ -46,12 +46,8 @@ func main() {
 		for _, update := range updates {
 			// Выводим полученное сообщение в консоль (для отладки)
 			fmt.Printf("New message from update %d: %v\n", update.Id, update.Message)
-
-			// Отправляем ответ пользователю
-			err := client.SendMessage(update.Message.Chat.Id, "Погода в Москве +25")
-			if err != nil {
-				log.Printf("error while sending message: %v\n", err)
-			}
+			// отправка ответа
+			answerForUser(client, int64(update.Message.Chat.Id), Weather)
 			// Обновляем offset, чтобы не получать старые сообщения повторно
 			offset = update.Id + 1
 		}
