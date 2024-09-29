@@ -1,6 +1,7 @@
 package main
 
 import (
+	weather "AMA_bot/pkg/weatherAPI"
 	"flag"
 	"fmt"
 	"log"
@@ -47,7 +48,7 @@ func main() {
 			// Выводим полученное сообщение в консоль (для отладки)
 			fmt.Printf("New message from update %d: %v\n", update.Id, update.Message)
 			// отправка ответа
-			answerForUser(client, int64(update.Message.Chat.Id), Weather)
+			answerForUser(client, int64(update.Message.Chat.Id), weather.GetWeather(update.Message.Text))
 			// Обновляем offset, чтобы не получать старые сообщения повторно
 			offset = update.Id + 1
 		}

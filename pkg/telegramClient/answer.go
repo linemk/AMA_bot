@@ -1,32 +1,14 @@
 package main
 
 import (
+	weather "AMA_bot/pkg/weatherAPI" // Импортируйте пакет с погодой
 	"fmt"
 	"net/url"
 	"strconv"
 )
 
-// нужна для обработки входящего ответа
-type WeatherAnswer struct {
-	City          string  `json:"city"`
-	Temperature   int     `json:"temperature"`
-	Precipitation string  `json:"precipitation"`
-	Humidity      int     `json:"humidity"`
-	Wind          float64 `json:"wind"`
-}
-
-// создадим фиктивные данные о погоде
-var Weather = WeatherAnswer{
-	City:          "Москва",
-	Temperature:   25,
-	Precipitation: "Ясно",
-	Humidity:      60,
-	Wind:          5.5,
-}
-
 // парсит ответ от WEATHER API. Форматируем данные для отправки пользователю в текстовом виде
-func parseWeatherAnswer(weather WeatherAnswer) string {
-	// пока создаем фиктивные данные, которые потом получим от WEATHER API для тестов
+func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедитесь, что здесь используется weather.WeatherAnswer
 	return fmt.Sprintf(
 		"🏙 Город: %s\n🌡️ Температура: %d°C\n☀ Осадки: %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
 		weather.City, weather.Temperature, weather.Precipitation, weather.Humidity, weather.Wind,
@@ -48,9 +30,9 @@ func (c *Client) SendMessage(chatID int, text string) error {
 }
 
 // Головная функция отправки ответа
-func answerForUser(client *Client, chatID int64, weather WeatherAnswer) {
+func answerForUser(client *Client, chatID int64, weatherData weather.WeatherAnswer) { // Используйте weather.WeatherAnswer здесь
 	// Формируем текст сообщения
-	message := parseWeatherAnswer(weather)
+	message := parseWeatherAnswer(weatherData)
 
 	// Отправляем сообщение
 	err := client.SendMessage(int(chatID), message)
