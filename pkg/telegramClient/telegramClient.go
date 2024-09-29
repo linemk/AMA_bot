@@ -68,20 +68,6 @@ func (c *Client) Updates(offset, limit int) ([]Update, error) {
 	return res.Result, nil
 }
 
-// отправляет сообщение в бота
-func (c *Client) SendMessage(chatID int, text string) error {
-	q := url.Values{}
-	q.Add("chat_id", strconv.Itoa(chatID))
-	q.Add("text", text)
-
-	_, err := c.doRequest("sendMessage", q)
-
-	if err != nil {
-		return fmt.Errorf("can't do request: %v", err)
-	}
-	return nil
-}
-
 // сборка и отправка запроса
 func (c *Client) doRequest(method string, query url.Values) ([]byte, error) {
 	u := url.URL{
