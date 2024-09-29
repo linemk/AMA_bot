@@ -21,6 +21,7 @@ type WeatherResponse struct {
 	} `json:"current"`
 }
 
+// s
 type WeatherAnswer struct {
 	City          string  `json:"city"`
 	Temperature   int     `json:"temperature"`
