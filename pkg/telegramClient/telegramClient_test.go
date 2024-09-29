@@ -10,8 +10,6 @@ import (
 	"testing"
 )
 
-
-
 func TestNewClient(t *testing.T) {
 	host := "api.telegram.org"
 	token := "1234"
@@ -35,16 +33,14 @@ func TestUpdates(t *testing.T) {
 
 func TestDoRequest(t *testing.T) {
 	var method = "getUpdates"
-	var client := Client{
-
-	}
+	var client = Client{}
 
 	u := url.URL{
 		Scheme: "https",
 		Host:   client.host,
 		Path:   path.Join(client.baseUrl, method),
 	}
-	req,err := http.NewServer()
+	req, err := http.NewServer()
 	if err != nil {
 		t.Fatalf("Error creating request: %v", err)
 		return
