@@ -1,4 +1,4 @@
-package main
+package telegramClient
 
 import (
 	weather "AMA_bot/pkg/weatherAPI" // Импортируйте пакет с погодой
