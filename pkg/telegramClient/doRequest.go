@@ -41,6 +41,11 @@ type Update struct {
 type Message struct {
 	Text string `json:"text"` // текст
 	Chat Chat   `json:"chat"` // id чата
+	User User   `json:"from"`
+}
+
+type User struct {
+	FirstName string `json:"first_name"`
 }
 
 type Chat struct {

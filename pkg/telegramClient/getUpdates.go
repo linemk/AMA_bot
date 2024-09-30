@@ -11,8 +11,6 @@ import (
 const Host string = "api.telegram.org"
 
 func TgClient(Token string) {
-	// при merge - удалим
-	//var token string = "7699031903:AAFRtoi4vh2i12MvuSPreBd-x5KHlVQPf_M"
 	var token = Token
 	// создаем клиента для обработки ответа от тг и отправки структуры на сервер
 	client := NewClient(Host, token)
@@ -32,11 +30,17 @@ func TgClient(Token string) {
 			// Выводим полученное сообщение в консоль (для отладки)
 			fmt.Printf("New message from update %d: %v\n", update.Id, update.Message)
 			// отправка ответа
-			answerForUser(client, int64(update.Message.Chat.Id), weather.GetWeather(update.Message.Text))
-			// Обновляем offset, чтобы не получать старые сообщения повторно
+			switch update.Message.Text {
+			case "/start":
+				StartParser(client, update.Message.Chat.Id, update.Message.User.FirstName)
+				break
+			default:
+				answerForUser(client, int64(update.Message.Chat.Id), weather.GetWeather(update.Message.Text))
+				// Обновляем offset, чтобы не получать старые сообщения повторно
+			}
 			offset = update.Id + 1
-		}
 
+		}
 		// Делаем паузу перед следующим запросом обновлений
 		time.Sleep(2 * time.Second)
 	}
