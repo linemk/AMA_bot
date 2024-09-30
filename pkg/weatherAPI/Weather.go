@@ -32,21 +32,21 @@ type WeatherAnswer struct {
 
 // GetWeather возвращает данные о погоде для указанного города
 func GetWeather(city string) WeatherAnswer {
-	apiKey := "840b43c108d3402292d160550242909"
+	apiKey := "840b43c108d3402292d160550242909" // ключ от погодного api
 	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, city)
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(url) // создаём запрос к api
 	if err != nil {
 		return WeatherAnswer{}
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body) // получаем ответ
 	if err != nil {
 		return WeatherAnswer{}
 	}
 
-	var weather WeatherResponse
+	var weather WeatherResponse // парсим это в структуру
 	if err := json.Unmarshal(body, &weather); err != nil {
 		return WeatherAnswer{}
 	}
