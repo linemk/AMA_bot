@@ -11,7 +11,7 @@ import (
 func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедитесь, что здесь используется weather.WeatherAnswer
 	return fmt.Sprintf(
 		"🏙 Город: %s\n🌡️ Температура: %d°C\n☀ Осадки: %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
-		weather.City, weather.Temperature, weather.Precipitation, weather.Humidity, weather.Wind/3.6) // fixed
+		weather.City, weather.Temperature, weather.Precipitation, weather.Humidity, weather.Wind/3.6) // fixed ура
 }
 
 // Непосредственно сама отправка сообщения в бота
