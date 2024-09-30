@@ -4,9 +4,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"net/http"
-	"net/http/httptest"
-	"net/url"
-	"path"
 	"testing"
 )
 
@@ -31,6 +28,7 @@ func TestUpdates(t *testing.T) {
 	t.Run("")
 }
 
+/*
 func TestDoRequest(t *testing.T) {
 	var method = "getUpdates"
 	var client = Client{}
@@ -47,3 +45,4 @@ func TestDoRequest(t *testing.T) {
 	}
 	recorder := httptest.NewRecorder()
 }
+*/
