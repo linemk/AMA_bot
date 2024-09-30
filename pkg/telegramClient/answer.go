@@ -1,6 +1,7 @@
 package telegramClient
 
 import (
+	translate "AMA_bot/pkg/translateAPI"
 	weather "AMA_bot/pkg/weatherAPI" // Импортируйте пакет с погодой
 	"fmt"
 	"net/url"
@@ -9,9 +10,36 @@ import (
 
 // парсит ответ от WEATHER API. Форматируем данные для отправки пользователю в текстовом виде
 func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедитесь, что здесь используется weather.WeatherAnswer
-	return fmt.Sprintf(
-		"🏙 Город: %s\n🌡️ Температура: %d°C\n☀ Осадки: %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
-		weather.City, weather.Temperature, weather.Precipitation, weather.Humidity, weather.Wind/3.6) // fixed ура
+	var smile string
+
+	switch weather.Precipitation {
+	case "Без осадков":
+
+		smile = "🌤"
+	case "Пасмурно":
+
+		smile = "☁️"
+	case "Небольшой дождь":
+		smile = "🌧"
+	case "Дождь":
+		smile = "🌧"
+	case "Переменная облачность":
+		smile = "🌤"
+	case "Снег":
+		smile = "❄️"
+	case "Метель":
+		smile = "❄️"
+	default:
+		smile = "☀"
+	}
+
+	result := fmt.Sprintf(
+		"🏙 Город: %s\n🌡️ Температура: %d°C\n%v %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
+		translate.EngToRus(weather.City), weather.Temperature, smile, weather.Precipitation, weather.Humidity, weather.Wind/3.6)
+	if weather.City == "" {
+		result = "💫 Возможно звезды не так сошлись...\nПопробуйте написать город латиницей.\nПример -> Krasnodar"
+	}
+	return result
 }
 
 // Непосредственно сама отправка сообщения в бота
