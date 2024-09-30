@@ -1,35 +1,19 @@
-package main
+package telegramClient
 
 import (
 	weather "AMA_bot/pkg/weatherAPI"
-	"flag"
 	"fmt"
 	"log"
 	"time"
 )
 
-// возвращает токен при вводе в cmd
-func getToken() string {
-	token := flag.String(
-		"token",
-		"",
-		"give token from telegram",
-	)
-	// обрабатывает наше значение
-	flag.Parse()
-	if *token == "" {
-		log.Fatal("token is required")
-	}
-	return *token
-}
-
 // хост является константой
 const Host string = "api.telegram.org"
 
-func main() {
+func TgClient(Token string) {
 	// при merge - удалим
-	var token string = "7699031903:AAFRtoi4vh2i12MvuSPreBd-x5KHlVQPf_M"
-
+	//var token string = "7699031903:AAFRtoi4vh2i12MvuSPreBd-x5KHlVQPf_M"
+	var token = Token
 	// создаем клиента для обработки ответа от тг и отправки структуры на сервер
 	client := NewClient(Host, token)
 
