@@ -1,6 +1,7 @@
 package weather
 
 import (
+	translate "AMA_bot/pkg/translateAPI"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -21,7 +22,7 @@ type WeatherResponse struct {
 	} `json:"current"`
 }
 
-// s
+// структура ответа
 type WeatherAnswer struct {
 	City          string  `json:"city"`
 	Temperature   int     `json:"temperature"`
@@ -33,7 +34,7 @@ type WeatherAnswer struct {
 // GetWeather возвращает данные о погоде для указанного города
 func GetWeather(city string) WeatherAnswer {
 	apiKey := "840b43c108d3402292d160550242909" // ключ от погодного api
-	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, city)
+	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s&lang=ru", apiKey, translate.RuToEng(city))
 
 	resp, err := http.Get(url) // создаём запрос к api
 	if err != nil {
