@@ -1,11 +1,12 @@
 package telegramClient
 
 import (
-	translate "AMA_bot/pkg/translateAPI"
-	weather "AMA_bot/pkg/weatherAPI" // Импортируйте пакет с погодой
+	translate "AMA_bot/pkg/translateAPI" // Импортируйте пакет с переводом
+	weather "AMA_bot/pkg/weatherAPI"     // Импортируйте пакет с погодой
 	"fmt"
 	"net/url"
 	"strconv"
+	"unicode"
 )
 
 // парсит ответ от WEATHER API. Форматируем данные для отправки пользователю в текстовом виде
@@ -21,6 +22,8 @@ func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедит�
 		smile = "☁️"
 	case "Небольшой дождь":
 		smile = "🌧"
+	case "Умеренный дождь":
+		smile = "🌧"
 	case "Дождь":
 		smile = "🌧"
 	case "Переменная облачность":
@@ -29,15 +32,33 @@ func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедит�
 		smile = "❄️"
 	case "Метель":
 		smile = "❄️"
+	case "Дымка":
+		smile = "🌫"
+	case "Туман":
+		smile = "🌫"
 	default:
 		smile = "☀"
 	}
 
+	// убираем всякое говно из ответа в городе
+	resultCity := ""
+	for i, symbol := range translate.EngToRus(weather.City) {
+		if i == 0 {
+			if symbol == 'г' {
+				continue
+			}
+		}
+		if !unicode.IsLetter(symbol) && symbol != '-' && symbol != ' ' {
+			continue
+		}
+		resultCity += string(symbol)
+	}
+
 	result := fmt.Sprintf(
 		"🏙 Город: %s\n🌡️ Температура: %d°C\n%v %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
-		translate.EngToRus(weather.City), weather.Temperature, smile, weather.Precipitation, weather.Humidity, weather.Wind/3.6)
+		resultCity, weather.Temperature, smile, weather.Precipitation, weather.Humidity, weather.Wind/3.6)
 	if weather.City == "" {
-		result = "💫 Возможно звезды не так сошлись...\nПопробуйте написать город латиницей.\nПример -> Krasnodar"
+		result = "💫 Возможно звезды не так сошлись...\nПопробуйте изменить запрос или написать город латиницей.\nПример -> Krasnodar"
 	}
 	return result
 }

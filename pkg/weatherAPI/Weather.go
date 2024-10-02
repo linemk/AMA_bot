@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"slices"
+	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 type WeatherResponse struct {
@@ -31,10 +35,38 @@ type WeatherAnswer struct {
 	Wind          float64 `json:"wind"`
 }
 
+// checkTrueCity для проверки города, который отправляем в погодный АПИ
+func checkTrueCity(city string) string {
+	result := ""
+
+	if utf8.RuneCountInString(city) <= 2 { // Проверка на длину строки 3 и более символов
+		return result
+	}
+
+	var cityForTranslate string
+	for i, symbol := range city {
+		if !unicode.IsLetter(symbol) && symbol != '-' && symbol != ' ' { // Проверка символов на буквы
+			return result
+		}
+		if i == 0 {
+			cityForTranslate += string(unicode.ToUpper(symbol)) // Первая буква заглавная
+		} else {
+			cityForTranslate += string(unicode.ToLower(symbol)) // Остальные буквы маленькие
+		}
+	}
+
+	result = cityForTranslate
+
+	if slices.Contains(Garbage, strings.ToLower(result)) {
+		result = ""
+	}
+	return result
+}
+
 // GetWeather возвращает данные о погоде для указанного города
 func GetWeather(city string) WeatherAnswer {
 	apiKey := "840b43c108d3402292d160550242909" // ключ от погодного api
-	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s&lang=ru", apiKey, translate.RuToEng(city))
+	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s&lang=ru", apiKey, translate.RuToEng(checkTrueCity(city)))
 
 	resp, err := http.Get(url) // создаём запрос к api
 	if err != nil {
