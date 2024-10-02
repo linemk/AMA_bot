@@ -16,6 +16,11 @@ type Client struct {
 	client  *http.Client // для создания запросов (do)
 }
 
+type ClientDoRequest interface {
+	Updates(offset, limit int) ([]Update, error)
+	SendMessage(chatID int, text string) error
+}
+
 // получает номер хоста + токен и формирует запрос
 func NewClient(host string, token string) *Client {
 	return &Client{
