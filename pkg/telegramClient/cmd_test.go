@@ -1,18 +1,19 @@
 package telegramClient
 
 import (
-	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-type MockClient struct {
-	mock.Mock
-}
-
 func TestStartParser(t *testing.T) {
-	t.Run("IfHaveAllElem", func(t *testing.T) {
-		client:= Client{
-			h
+	var ClientTest = NewClient("23", "23")
+
+	t.Run("If id is empty", func(t *testing.T) {
+		expectedError := "id or name is empty"
+		err := StartParser(ClientTest, 0, "")
+
+		if assert.Error(t, err) {
+			assert.Equal(t, expectedError, err.Error())
 		}
 	})
 }

@@ -2,8 +2,8 @@ package telegramClient
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"net/http"
 	"testing"
 )
 
@@ -18,31 +18,17 @@ func TestNewClient(t *testing.T) {
 	assert.Equal(t, "bot"+token, client.baseUrl)
 }
 
-func TestUpdates(t *testing.T) {
-	var token = "1234"
-	var client = Client{
-		host:    "api.telegram.org",
-		baseUrl: "bot" + token,
-		client:  &http.Client{},
-	}
-	t.Run("")
+type MockClient struct {
+	mock.Mock
 }
 
-/*
-func TestDoRequest(t *testing.T) {
-	var method = "getUpdates"
-	var client = Client{}
-
-	u := url.URL{
-		Scheme: "https",
-		Host:   client.host,
-		Path:   path.Join(client.baseUrl, method),
-	}
-	req, err := http.NewServer()
-	if err != nil {
-		t.Fatalf("Error creating request: %v", err)
-		return
-	}
-	recorder := httptest.NewRecorder()
+// Реализация метода Updates для мока
+func (m *MockClient) Updates(offset, limit int) ([]Update, error) {
+	args := m.Called(offset, limit)
+	return args.Get(0).([]Update), args.Error(1)
 }
-*/
+
+func (m *MockClient) SendMessage(chatID int, text string) error {
+	args := m.Called(chatID, text)
+	return args.Error(0)
+}
