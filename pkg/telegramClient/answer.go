@@ -11,40 +11,29 @@ import (
 
 // парсит ответ от WEATHER API. Форматируем данные для отправки пользователю в текстовом виде
 func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедитесь, что здесь используется weather.WeatherAnswer
-	var smile string
+	// мапа для смайлов осадков
+	smilesMap := map[string][]string{
+		"🌤":  {"Без осадков", "Переменная облачность"},
+		"☁️": {"Пасмурно", "Облачно"},
+		"🌧":  {"Небольшой дождь", "Умеренный дождь", "Дождь", "Ливень", "Шторм", "Небольшой ливневый дождь", "Умеренный или сильный ливневый дождь"},
+		"❄️": {"Снег", "Метель", "Небольшой снег"},
+		"🌫":  {"Туман", "Дымка"},
+	}
+	var smileIcon string = "☀"
 
-	switch weather.Precipitation {
-	case "Без осадков":
-
-		smile = "🌤"
-	case "Пасмурно":
-
-		smile = "☁️"
-	case "Небольшой дождь":
-		smile = "🌧"
-	case "Умеренный дождь":
-		smile = "🌧"
-	case "Дождь":
-		smile = "🌧"
-	case "Переменная облачность":
-		smile = "🌤"
-	case "Снег":
-		smile = "❄️"
-	case "Метель":
-		smile = "❄️"
-	case "Дымка":
-		smile = "🌫"
-	case "Туман":
-		smile = "🌫"
-	default:
-		smile = "☀"
+	for i, v := range smilesMap {
+		for _, precipitation := range v {
+			if precipitation == weather.Precipitation {
+				smileIcon = i
+			}
+		}
 	}
 
 	// убираем всякое говно из ответа в городе
 	resultCity := ""
 	for i, symbol := range translate.EngToRus(weather.City) {
 		if i == 0 {
-			if symbol == 'г' {
+			if symbol == 'г' || symbol == 'q' {
 				continue
 			}
 		}
@@ -56,7 +45,7 @@ func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедит�
 
 	result := fmt.Sprintf(
 		"🏙 Город: %s\n🌡️ Температура: %d°C\n%v %s\n💧 Влажность: %d%%\n💨 Ветер: %.2f м/с",
-		resultCity, weather.Temperature, smile, weather.Precipitation, weather.Humidity, weather.Wind/3.6)
+		resultCity, weather.Temperature, smileIcon, weather.Precipitation, weather.Humidity, weather.Wind/3.6)
 	if weather.City == "" {
 		result = "💫 Возможно звезды не так сошлись...\nПопробуйте изменить запрос или написать город латиницей.\nПример -> Krasnodar"
 	}
