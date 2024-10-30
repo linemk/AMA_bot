@@ -1,6 +1,6 @@
 package weather
 
-var Garbage = []string{"blyaa", "blyaaa", "loh", "pidor", "mraz", "ublyudok", "mudak", "shluha", "tvar", "zhlob", "govnyuk", "debil",
+var Garbage = []string{"blyaa", "хер", "blyaaa", "loh", "pidor", "mraz", "ublyudok", "mudak", "shluha", "tvar", "zhlob", "govnyuk", "debil",
 	"durak", "pridurak", "idiot", "tupoy", "merzavec", "gadina", "chmo", "mrazota", "svinya",
 	"gondon", "prost", "eblan", "blyad", "pizdec", "hnuy", "khuila", "kurva", "psikh", "chekushka",
 	"padla", "chern", "shlyukh", "syka", "kal", "svoloch", "mudila", "pizda", "ebat", "nahuy",

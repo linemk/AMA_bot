@@ -94,4 +94,5 @@ func GetWeather(city string) WeatherAnswer {
 	}
 
 	return answer
+
 }
