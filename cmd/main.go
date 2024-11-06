@@ -1,7 +1,7 @@
 package main
 
 import (
-	"AMA_bot/pkg/telegramClient"
+	"AMA_bot/internal/telegramClient"
 	"flag"
 	"log"
 )
