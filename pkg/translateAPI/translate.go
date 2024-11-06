@@ -19,7 +19,7 @@ type ResponseData struct {
 
 // Из русского в английский
 func RuToEng(textCity string) string {
-	query := fmt.Sprintf("?q=%s&langpair=ru|en", textCity) // Формируем строку запроса к этому говнопереводчику
+	query := fmt.Sprintf("?q=%s&langpair=ru|en&mt=1", textCity) // Формируем строку запроса к этому говнопереводчику
 	return serverPartTranslate(query)
 }
 

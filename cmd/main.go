@@ -1,24 +1,18 @@
 package main
 
 import (
-	"AMA_bot/internal/telegramClient"
-	"flag"
+	"AMA_bot/pkg/telegramClient"
 	"log"
+	"os"
 )
 
 // возвращает токен при вводе в cmd
 func GetToken() string {
-	token := flag.String(
-		"token",
-		"",
-		"give token from telegram",
-	)
-	// обрабатывает наше значение
-	flag.Parse()
-	if *token == "" {
+	token := os.Getenv("TELEGRAM_BOT_TOKEN")
+	if token == "" {
 		log.Fatal("token is required")
 	}
-	return *token
+	return token
 }
 
 func main() {
