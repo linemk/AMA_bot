@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"unicode"
 )
 
 // парсит ответ от WEATHER API. Форматируем данные для отправки пользователю в текстовом виде
-func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедитесь, что здесь используется weather.WeatherAnswer
-	// мапа для смайлов осадков
+func parseWeatherAnswer(weather weather.WeatherAnswer) string {
+	// Мапа для смайлов осадков
 	smilesMap := map[string][]string{
 		"🌤":  {"Без осадков", "Переменная облачность"},
 		"☁️": {"Пасмурно", "Облачно"},
@@ -29,13 +30,24 @@ func parseWeatherAnswer(weather weather.WeatherAnswer) string { // Убедит�
 		}
 	}
 
-	// убираем всякое говно из ответа в городе
+	// Убираем лишние символы из города
 	resultCity := ""
-	for i, symbol := range translate.EngToRus(weather.City) {
-		if i == 0 {
-			if symbol == 'г' || symbol == 'q' {
-				continue
-			}
+	cityName := translate.EngToRus(weather.City)
+	if strings.Contains(cityName, "q") || strings.Contains(cityName, "langpair") {
+		cityName = strings.ReplaceAll(cityName, "q", "")
+		cityName = strings.ReplaceAll(cityName, "langpair", "")
+		cityName = strings.ReplaceAll(cityName, "en", "")
+		cityName = strings.ReplaceAll(cityName, "ru", "")
+
+	}
+	if strings.Contains(cityName, "Re") {
+		cityName = strings.ReplaceAll(cityName, "Re", "")
+
+	}
+
+	for i, symbol := range cityName {
+		if i == 0 && symbol == 'г' {
+			continue
 		}
 		if !unicode.IsLetter(symbol) && symbol != '-' && symbol != ' ' {
 			continue

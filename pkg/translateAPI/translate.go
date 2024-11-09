@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // Структура для хранения ответа от переводчика
@@ -19,8 +20,8 @@ type ResponseData struct {
 
 // Из русского в английский
 func RuToEng(textCity string) string {
-	query := fmt.Sprintf("?q=%s&langpair=ru|en&mt=1", textCity) // Формируем строку запроса к этому говнопереводчику
-	return serverPartTranslate(query)
+	return url.QueryEscape(textCity)
+
 }
 
 // Из английского в русский
@@ -34,6 +35,7 @@ func EngToRus(textCity string) string {
 как вариант попробывать еще сделать проверку, если не нашел город по переводчику, то сделать транскрипцию, это либо новый апи
 либо самим как-то извратиться.
 */
+
 func serverPartTranslate(query string) string {
 	url := "https://api.mymemory.translated.net/get"
 	// Отправляем GET-запрос
